@@ -60,7 +60,7 @@ private fun DraggableTextLowLevel() {
         var offsetX by remember { mutableStateOf(0f) }
         var offsetY by remember { mutableStateOf(0f) }
 
-        Box(
+        ResizableContainer(modifier =
             Modifier
                 .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
                 .background(Color.Blue)
@@ -72,6 +72,32 @@ private fun DraggableTextLowLevel() {
                         offsetY += dragAmount.y
                     }
                 }
-        )
+        ) {
+            Text("ABOBA SUSSUS")
+        }
+
+
+        ResizableContainer(modifier =
+            Modifier
+                .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
+                .background(Color.Green)
+                .size(50.dp)
+                .pointerInput(Unit) {
+                    detectDragGestures { change, dragAmount ->
+                        change.consume()
+                        offsetX += dragAmount.x
+                        offsetY += dragAmount.y
+                    }
+                }
+        ) {
+            Text("HUY")
+        }
+    }
+}
+
+@Composable
+fun ResizableContainer(modifier: Modifier, content: @Composable () -> Unit) {
+    Box(modifier = modifier) {
+        content()
     }
 }
