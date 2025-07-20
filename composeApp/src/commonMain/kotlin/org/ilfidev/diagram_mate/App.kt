@@ -26,6 +26,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import diagrammate.composeapp.generated.resources.Res
 import diagrammate.composeapp.generated.resources.compose_multiplatform
+import org.ilfidev.diagram_mate.presentation.draggableBoard.model.DraggableItem
+import org.ilfidev.diagram_mate.ui.screens.DraggableBoardScreen
 import kotlin.math.roundToInt
 
 @Composable
@@ -33,7 +35,7 @@ import kotlin.math.roundToInt
 fun App() {
     MaterialTheme {
         var showContent by remember { mutableStateOf(false) }
-        DraggableTextLowLevel()
+        DraggableBoardScreen()
 //        Column(
 //            modifier = Modifier
 //                .safeContentPadding()
@@ -52,52 +54,5 @@ fun App() {
 //            }
 //        }
 
-    }
-}
-@Composable
-private fun DraggableTextLowLevel() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        var offsetX by remember { mutableStateOf(0f) }
-        var offsetY by remember { mutableStateOf(0f) }
-
-        ResizableContainer(modifier =
-            Modifier
-                .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
-                .background(Color.Blue)
-                .size(50.dp)
-                .pointerInput(Unit) {
-                    detectDragGestures { change, dragAmount ->
-                        change.consume()
-                        offsetX += dragAmount.x
-                        offsetY += dragAmount.y
-                    }
-                }
-        ) {
-            Text("ABOBA SUSSUS")
-        }
-
-
-        ResizableContainer(modifier =
-            Modifier
-                .offset { IntOffset(offsetX.roundToInt(), offsetY.roundToInt()) }
-                .background(Color.Green)
-                .size(50.dp)
-                .pointerInput(Unit) {
-                    detectDragGestures { change, dragAmount ->
-                        change.consume()
-                        offsetX += dragAmount.x
-                        offsetY += dragAmount.y
-                    }
-                }
-        ) {
-            Text("HUY")
-        }
-    }
-}
-
-@Composable
-fun ResizableContainer(modifier: Modifier, content: @Composable () -> Unit) {
-    Box(modifier = modifier) {
-        content()
     }
 }

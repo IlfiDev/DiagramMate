@@ -5,15 +5,15 @@ import androidx.compose.ui.geometry.Size
 
 data class DraggableItem(
     val id: String,
+    val relativePosition: Offset,
     val position: Offset,
     val size: Size,
     val text: String = "",
     val isEditing: Boolean = false,
-    val children: List<DraggableItem> = emptyList()
+    val hasParent: Boolean = false,
+    val children: MutableList<String> = mutableListOf<String>()
 )
 
-data class DraggableBoardState(
-    val items: List<DraggableItem> = emptyList(),
-    val isDragging: Boolean = false,
-    val isEditing: Boolean = false,
+data class DraggableBoard(
+    val items: MutableMap<String, DraggableItem> = mutableMapOf<String, DraggableItem>(),
 )
