@@ -26,7 +26,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import diagrammate.composeapp.generated.resources.Res
 import diagrammate.composeapp.generated.resources.compose_multiplatform
-import org.ilfidev.diagram_mate.presentation.draggableBoard.model.DraggableItem
 import org.ilfidev.diagram_mate.ui.screens.DraggableBoardScreen
 import kotlin.math.roundToInt
 

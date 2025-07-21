@@ -23,9 +23,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelStore
 import androidx.lifecycle.viewmodel.compose.viewModel
-import org.ilfidev.diagram_mate.presentation.draggableBoard.model.DraggableBoardEvent
-import org.ilfidev.diagram_mate.presentation.draggableBoard.model.DraggableBoardIntent
-import org.ilfidev.diagram_mate.presentation.draggableBoard.model.DraggableItem
+import org.ilfidev.diagram_mate.presentation.draggableBoard.model.BoardItem
 import org.ilfidev.diagram_mate.presentation.draggableBoard.viewmodel.DraggableBoardViewModel
 
 
@@ -36,13 +34,12 @@ fun DraggableBoardScreen(viewModel: DraggableBoardViewModel = viewModel()) {
 
     }
     state.items.forEach {
-        println(it.value.toString())
         val children = it.value.children
         DraggableTextLowLevel(it.value, {offset -> viewModel.onDragItemEnd(it.key, offset)}, onDrag = {offset -> viewModel.updateChildren(children, offset)})
     }
 }
 @Composable
-fun DraggableTextLowLevel(state: DraggableItem, onDragEnd: (Offset) -> Unit = {}, onDrag: (Offset) -> Unit = {}) {
+fun DraggableTextLowLevel(state: BoardItem, onDragEnd: (Offset) -> Unit = {}, onDrag: (Offset) -> Unit = {}) {
     Box(modifier = Modifier.fillMaxSize()) {
         var localOffset by remember { mutableStateOf(state.position) }
         var isDragging by remember { mutableStateOf(false) }
@@ -75,11 +72,14 @@ fun DraggableTextLowLevel(state: DraggableItem, onDragEnd: (Offset) -> Unit = {}
                         localOffset += dragAmount
                         onDrag(dragAmount)
                     }
-//                    onUpdate(DraggableBoardIntent.EndDragging)
-
                 }
         ) {
-            Text(state.text)
+            when(state) {
+                is BoardItem.BlockItem -> {}
+                is BoardItem.TextItem -> {
+                    Text(state.text)
+                }
+            }
         }
     }
 }
