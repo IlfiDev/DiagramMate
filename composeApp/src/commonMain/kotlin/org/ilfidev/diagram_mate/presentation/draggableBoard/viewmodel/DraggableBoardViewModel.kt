@@ -14,7 +14,7 @@ import org.ilfidev.diagram_mate.presentation.draggableBoard.model.DraggableBoard
 class DraggableBoardViewModel : ViewModel() {
     val firstItem: MutableMap<String, BoardItem> = mutableMapOf(
         "0" to BoardItem.BlockItem(id = "0",
-            position = Offset(200f, 200f), size = Size(100f, 100f))
+            position = Offset(200f, 200f), size = Size(300f, 300f))
     )
     private val _board = MutableStateFlow(DraggableBoard(items = firstItem))
     val board: StateFlow<DraggableBoard> = _board
@@ -22,7 +22,7 @@ class DraggableBoardViewModel : ViewModel() {
     private var idCounter = 1
 
     fun addItem() {
-        val item = BoardItem.BlockItem(id = idCounter.toString(), position = Offset(100f * idCounter, 100f * idCounter), size = Size(100f, 100f), )
+        val item = BoardItem.TextItem(id = idCounter.toString(), position = Offset(100f * idCounter, 100f * idCounter), size = Size(100f, 100f), text = "aboba boba $idCounter")
 //        _board.value.items.put(item.id, item)
         val itemsMap = _board.value.items.toMutableMap()
         itemsMap.put(item.id, item)
@@ -31,28 +31,8 @@ class DraggableBoardViewModel : ViewModel() {
             current.copy(items = itemsMap)
         }
         idCounter += 1
-//        _board.value.items["0"]?.children?.add(item.id)
     }
 
-//    fun onDragItem(id: String, position: Offset) {
-//        val item = _board.value.items[id] ?: return
-//        val change = position - item.position
-//        val updatedChildren = updateChildren(item.children, change)
-//
-//        val updatedItem = when (item){
-//            is BoardItem.BlockItem -> item.copy(position = position)
-//            is BoardItem.TextItem -> item.copy(position = position)
-//        }
-//
-//        val updatedMap = _board.value.items.toMutableMap().apply {
-//            this[id] = updatedItem
-//            updatedChildren.forEach { child ->
-//                this[child.id] = child
-//            }
-//        }
-//        _board.value = _board.value.copy(items = updatedMap)
-//
-//    }
 
     fun onDragItemEnd(id: String, position: Offset) {
         val item = _board.value.items[id] ?: return
@@ -65,16 +45,6 @@ class DraggableBoardViewModel : ViewModel() {
         }
         _board.value = _board.value.copy(items = updatedMap)
     }
-
-//    fun updateChildren(childrenIds: List<String>, updateValue: Offset) : List<DraggableItem> {
-//        val listOfUpdatedChildren = mutableListOf<DraggableItem>()
-//        childrenIds.forEach { childId ->
-//            val child = _board.value.items[childId]
-//            val updatedChild = child?.copy(position = child.position + updateValue)
-//            updatedChild?.let { listOfUpdatedChildren.add(it) }
-//        }
-//        return listOfUpdatedChildren
-//    }
 
     fun updateChildren(childrenIds: List<String>, updateValue: Offset) {
         val listOfUpdatedChildren = mutableListOf<BoardItem>()

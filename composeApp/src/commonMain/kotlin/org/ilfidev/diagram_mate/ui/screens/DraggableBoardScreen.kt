@@ -1,11 +1,14 @@
 package org.ilfidev.diagram_mate.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,7 +45,9 @@ fun DraggableBoardScreen(viewModel: DraggableBoardViewModel = viewModel()) {
 fun DraggableTextLowLevel(state: BoardItem, onDragEnd: (Offset) -> Unit = {}, onDrag: (Offset) -> Unit = {}) {
     Box(modifier = Modifier.fillMaxSize()) {
         var localOffset by remember { mutableStateOf(state.position) }
+        var size by remember { mutableStateOf(state.size)}
         var isDragging by remember { mutableStateOf(false) }
+        var isEditing by remember { mutableStateOf(false)}
 
         LaunchedEffect(state.position) {
             if (!isDragging) {
@@ -50,38 +55,50 @@ fun DraggableTextLowLevel(state: BoardItem, onDragEnd: (Offset) -> Unit = {}, on
             }
         }
 
-        ResizableContainer(modifier =
-            Modifier
-                .offset { IntOffset(localOffset.x.toInt(), localOffset.y.toInt()) }
-                .background(Color.Green)
-                .size(50.dp)
-                .pointerInput(Unit) {
-                    detectDragGestures(
-                        onDragStart = {
-                            isDragging = true
-                        },
-                        onDragCancel = {
-                            isDragging = false
-                        },
-                        onDragEnd = {
-                            isDragging = false
-                            onDragEnd(localOffset)
-                        }
-                    ) { change, dragAmount ->
-                        change.consume()
-                        localOffset += dragAmount
-                        onDrag(dragAmount)
+        val modifier = Modifier
+            .offset { IntOffset(localOffset.x.toInt(), localOffset.y.toInt()) }
+            .then(
+                when (state) {
+                    is BoardItem.BlockItem -> Modifier
+                        .background(state.backgroundColor)
+                        .border(2.dp, state.lineColor)
+
+                    is BoardItem.TextItem -> Modifier
+                        .background(Color.Transparent)
+                }
+            )
+            .size(size.width.dp, size.height.dp)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onTap = {
+                        isEditing = !isEditing
                     }
+                )
+                detectDragGestures(
+                    onDragStart = {
+                        isDragging = true
+                    },
+                    onDragCancel = {
+                        isDragging = false
+                    },
+                    onDragEnd = {
+                        isDragging = false
+                        onDragEnd(localOffset)
+                    }
+                ) { change, dragAmount ->
+                    change.consume()
+                    localOffset += dragAmount
+                    onDrag(dragAmount)
                 }
-        ) {
-            when(state) {
+            }
+        ResizableContainer(modifier = modifier) {
+            when (state) {
                 is BoardItem.BlockItem -> {}
-                is BoardItem.TextItem -> {
-                    Text(state.text)
-                }
+                is BoardItem.TextItem -> Text(state.text)
             }
         }
     }
+
 }
 
 @Composable
@@ -90,3 +107,11 @@ fun ResizableContainer(modifier: Modifier, content: @Composable () -> Unit) {
         content()
     }
 }
+
+@Composable
+fun EditControls() {
+
+}
+
+
+

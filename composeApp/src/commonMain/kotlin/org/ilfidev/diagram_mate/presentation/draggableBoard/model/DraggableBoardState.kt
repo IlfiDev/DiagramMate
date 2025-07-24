@@ -2,6 +2,7 @@ package org.ilfidev.diagram_mate.presentation.draggableBoard.model
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Color
 
 interface BaseItem {
     val id: String
@@ -27,6 +28,8 @@ sealed class BoardItem : BaseItem {
         override val size: Size,
         override val isDraggable: Boolean = true,
         override val children: MutableList<String> = mutableListOf<String>(),
+        val backgroundColor: Color = Color.White,
+        val lineColor: Color = Color.Black
     ) : BoardItem()
 }
 //data class DraggableItem(
